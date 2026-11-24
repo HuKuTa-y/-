@@ -1,0 +1,24 @@
+CREATE TABLE sales
+(
+	id SERIAL PRIMARY KEY,
+	customer_id INTEGER REFERENCES customers(id) ON DELETE SET NULL,
+	employee_id INTEGER REFERENCES employees(id) ON DELETE RESTRICT,
+	bakery_id INTEGER REFERENCES bakeries(id) ON DELETE RESTRICT,
+	date DATE NOT NULL,
+	payment_method VARCHAR(30) NOT NULL,
+	total_amount DECIMAL(8, 2) NOT NULL,
+	status VARCHAR NOT NULL DEFAULT 'completed' CHECK (status IN ('completed', 'not_completed'))
+);
+
+
+CREATE TABLE sale_details
+(
+	id SERIAL PRIMARY KEY,
+	sale_id INTEGER REFERENCES sales(id) ON DELETE CASCADE,
+	product_id INTEGER REFERENCES products(id) ON DELETE RESTRICT,
+	quantity DECIMAL(8, 2) NOT NULL,
+	total_per_item DECIMAL(8, 2),
+	discount_id INTEGER REFERENCES discounts(id) ON DELETE RESTRICT,
+	created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
